@@ -185,6 +185,10 @@
           :total-visible="5"
       ></v-pagination>
     </div>
+
+    <v-alert v-if="errorFlag" type="error" dismissible style="position: absolute; right: 2%; bottom: 2%">
+      {{ errorMessage }}
+    </v-alert>
   </v-container>
 </template>
 
@@ -206,6 +210,10 @@ export default {
       mdiSwordCross,
       mdiPistol
     },
+
+    errorFlag: false,
+    errorMessage: '',
+
     activePicker: null,
     menu: false,
     loading: false,
@@ -258,16 +266,17 @@ export default {
         page: this.page,
         limit: this.limit
       }
-      axios.create()
+      axios.create(this.getHeader())
           .post(str, data)
           .then(resp => {
             this.Spacemarines = resp.data.items
-            this.pageNumber = resp.data.pageNumbers
+            this.pageNumber = resp.data.pageNumber
             this.$store.commit('clearAllSpacemarines')
             this.$store.commit('updateSpacemarines', this.Spacemarines)
-          }).catch(() => {
-        this.renderComponent = false
-      })
+          })
+          .catch(err => {
+            this.showError(err.response.data.message)
+          })
     },
 
     getSortBy: function (titleSortBy) {
@@ -368,6 +377,19 @@ export default {
 
     saveDate() {
       this.$refs.menu.save(this.creationDate)
+    },
+
+    async showError(errorMessage) {
+      if (this.errorFlag === true) {
+        this.errorMessage = ''
+        this.errorFlag = false
+        await new Promise(resolve => setTimeout(resolve, 200))
+      }
+      this.errorMessage = errorMessage
+      this.errorFlag = true
+      await new Promise(resolve => setTimeout(resolve, this.errorTimer))
+      this.errorMessage = ""
+      this.errorFlag = false
     }
   },
   created() {

@@ -85,6 +85,10 @@
         Сохранить и закрыть
       </v-btn>
     </v-card>
+
+    <v-alert v-if="errorFlag" type="error" dismissible style="position: absolute; right: 2%; bottom: 2%">
+      {{ errorMessage }}
+    </v-alert>
   </v-form>
 </template>
 
@@ -101,6 +105,9 @@ export default {
       mdiFormTextbox,
       mdiShipWheel
     },
+
+    errorFlag: false,
+    errorMessage: '',
 
     loadingRemove: false,
     loadingSave: false,
@@ -137,9 +144,10 @@ export default {
         ).post(str, data)
             .then(resp => {
               console.log(resp.data)
-            }).catch(err => {
-          if (this.doRefresh(err.response.status)) this.submit()
-        })
+            })
+            .catch(err => {
+              this.showError(err.response.data.message)
+            })
         await new Promise(resolve => setTimeout(resolve, this.awaitTimer))
         this.updateOverlay()
 
@@ -149,6 +157,19 @@ export default {
         this.$emit('updateParent', {data2})
         this.loadingSave = false
       }
+    },
+
+    async showError(errorMessage) {
+      if (this.errorFlag === true) {
+        this.errorMessage = ''
+        this.errorFlag = false
+        await new Promise(resolve => setTimeout(resolve, 200))
+      }
+      this.errorMessage = errorMessage
+      this.errorFlag = true
+      await new Promise(resolve => setTimeout(resolve, this.errorTimer))
+      this.errorMessage = ""
+      this.errorFlag = false
     },
 
     updateOverlay() {

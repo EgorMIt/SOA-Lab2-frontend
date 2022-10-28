@@ -145,6 +145,10 @@
         Сохранить и закрыть
       </v-btn>
     </v-card>
+
+    <v-alert v-if="errorFlag" type="error" dismissible style="position: absolute; right: 2%; bottom: 2%">
+      {{ errorMessage }}
+    </v-alert>
   </v-form>
 </template>
 
@@ -167,6 +171,9 @@ export default {
       mdiPistol,
       mdiFormTextbox
     },
+
+    errorFlag: false,
+    errorMessage: '',
 
     loadingRemove: false,
     loadingSave: false,
@@ -214,9 +221,10 @@ export default {
         ).put(str, data)
             .then(resp => {
               console.log(resp.data)
-            }).catch(err => {
-          if (this.doRefresh(err.response.status)) this.submit()
-        })
+            })
+            .catch(err => {
+              this.showError(err.response.data.message)
+            })
         await new Promise(resolve => setTimeout(resolve, this.awaitTimer))
         this.updateOverlay()
 
@@ -231,11 +239,13 @@ export default {
     async removeElement() {
       this.loadingRemove = true
       let str = "/spacemarines" + this.spacemarineIndex
-      axios.create(
-          this.getHeader()
+      axios.create(this.getHeader()
       ).delete(str)
           .then(resp => {
             console.log(resp.data)
+          })
+          .catch(err => {
+            this.showError(err.response.data.message)
           })
       await new Promise(resolve => setTimeout(resolve, this.awaitTimer))
       this.updateOverlay()
@@ -260,6 +270,19 @@ export default {
             this.coordinateX = resp.data.coordinates.x
             this.coordinateY = resp.data.coordinates.y
           })
+    },
+
+    async showError(errorMessage) {
+      if (this.errorFlag === true) {
+        this.errorMessage = ''
+        this.errorFlag = false
+        await new Promise(resolve => setTimeout(resolve, 200))
+      }
+      this.errorMessage = errorMessage
+      this.errorFlag = true
+      await new Promise(resolve => setTimeout(resolve, this.errorTimer))
+      this.errorMessage = ""
+      this.errorFlag = false
     },
 
     updateOverlay() {

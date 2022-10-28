@@ -49,6 +49,10 @@
         Закрыть
       </v-btn>
     </v-card>
+
+    <v-alert v-if="errorFlag" type="error" dismissible style="position: absolute; right: 2%; bottom: 2%">
+      {{ errorMessage }}
+    </v-alert>
   </v-form>
 </template>
 
@@ -66,6 +70,9 @@ export default {
     },
     absolute: true,
     valid: true,
+
+    errorFlag: false,
+    errorMessage: '',
 
     ChooseSpaceship: '',
     Spaceships: [],
@@ -90,7 +97,7 @@ export default {
 
     getListOfSpaceships() {
       let str = "/spaceships"
-      axios.create(
+      axios.create(this.getHeader()
       ).get(str)
           .then(resp => {
             console.log(resp.data)
@@ -102,15 +109,31 @@ export default {
       if (this.$refs.form.validate()) {
         this.loadingRemove = true
         let str = "/spaceships/" + this.ChooseSpaceship + "/unload"
-        axios.create(
+        axios.create(this.getHeader()
         ).post(str)
             .then(resp => {
               console.log(resp.data)
+            })
+            .catch(err => {
+              this.showError(err.response.data.message)
             })
         await new Promise(resolve => setTimeout(resolve, this.awaitTimer))
         this.updateOverlay()
         this.loadingRemove = false
       }
+    },
+
+    async showError(errorMessage) {
+      if (this.errorFlag === true) {
+        this.errorMessage = ''
+        this.errorFlag = false
+        await new Promise(resolve => setTimeout(resolve, 200))
+      }
+      this.errorMessage = errorMessage
+      this.errorFlag = true
+      await new Promise(resolve => setTimeout(resolve, this.errorTimer))
+      this.errorMessage = ""
+      this.errorFlag = false
     }
 
   },

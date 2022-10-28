@@ -107,7 +107,7 @@ export default {
 
     getListOfSpaceships() {
       let str = "/spaceships"
-      axios.create(
+      axios.create(this.getHeader()
       ).get(str)
           .then(resp => {
             console.log(resp.data)
@@ -117,7 +117,7 @@ export default {
 
     getListOfSpacemarines() {
       let str = "/spacemarines"
-      axios.create(
+      axios.create(this.getHeader()
       ).get(str)
           .then(resp => {
             console.log(resp.data)
@@ -129,7 +129,7 @@ export default {
       if (this.$refs.form.validate()) {
         this.loadingRemove = true
         let str = "/spaceships/" + this.ChooseSpaceship + "/load/" + this.ChooseSpacemarine
-        axios.create(
+        axios.create(this.getHeader()
         ).post(str)
             .then(resp => {
               console.log(resp.data)

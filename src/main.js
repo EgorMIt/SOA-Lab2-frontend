@@ -3,10 +3,11 @@ import App from './App.vue'
 import router from './router'
 import store from './store/store'
 import vuetify from './plugins/vuetify'
-import axios from "axios";
+//import axios from "axios";
 
 Vue.mixin({
     methods: {
+        /*
         doRefresh(status) {
             let data = {
                 refreshToken: localStorage.refreshToken
@@ -28,7 +29,7 @@ Vue.mixin({
                     })
                 return flag
             }
-        },
+        },*/
         getHeader() {
             return {
                 baseURL: this.hostname,
@@ -43,6 +44,9 @@ Vue.mixin({
             get awaitTimer() {
                 return 1000;
             },
+            get errorTimer() {
+                return 5000;
+            }
         }
     }
 })

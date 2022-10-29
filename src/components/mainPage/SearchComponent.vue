@@ -153,8 +153,11 @@
       </div>
       <v-select
           :disabled="healthCheck"
-          v-model="titleSortBy"
+          v-model="sortBy"
+          name="sortBy"
           dense
+          :item-text="'title'"
+          :item-value="'name'"
           :items="sortByList"
           color=#778899
           label="Сортировка:"
@@ -166,7 +169,7 @@
 
     <div style="margin-left: 11px">
       <div style="margin-top: 30px; margin-bottom: 30px; font-size: 20px" class="font-weight-medium">
-        Список космодесантников, отсортированных "{{ titleSortBy }}"
+        Список космодесантников, отсортированных по полю "{{ sortBy }}"
       </div>
       <v-row v-for="(item, index) in Spacemarines" :key="index">
         <SpacemarineButton :id="item.id" :SpacemarineName="item.name" :health="item.health"
@@ -240,8 +243,32 @@ export default {
     categoryList: ["AGGRESSOR", "ASSAULT", "HELIX"],
     weaponTypeList: ["COMBI_FLAMER", "GRENADE_LAUNCHER", "INFERNO_PISTOL"],
     meleeWeaponList: ["CHAIN_SWORD", "CHAIN_AXE", "POWER_FIST"],
-    sortByList: ["По имени", "По здовроью", "По категории", "По оружию", "По оружию ближнего боя", "По дате создания"],
-    healthList: ["HP равно: ", "HP больше чем: ", "HP меньше чем: "],
+    sortByList: [{
+      name: "name",
+      title: "По имени"
+    },
+      {
+        name: "health",
+        title: "По здовроью"
+      },
+      {
+        name: "category",
+        title: "По категории"
+      },
+      {
+        name: "weaponType",
+        title: "По оружию"
+      },
+      {
+        name: "meleeWeapon",
+        title: "По оружию ближнего боя"
+      },
+      {
+        name: "creationDate",
+        title: "По дате создания"
+      }],
+
+    healthList: ["HP равно: ", "HP больше чем: "],
   }),
 
   watch: {
@@ -252,7 +279,6 @@ export default {
 
   methods: {
     getListOfSpacemarines() {
-      this.getSortBy(this.titleSortBy)
       this.Spacemarines = new Array(this.limit)
       let str = "/spacemarines/search"
       let data = {
@@ -279,29 +305,6 @@ export default {
           })
     },
 
-    getSortBy: function (titleSortBy) {
-      switch (titleSortBy) {
-        case this.sortByList[0]:
-          this.sortBy = "name"
-          break;
-        case this.sortByList[1]:
-          this.sortBy = "health"
-          break;
-        case this.sortByList[2]:
-          this.sortBy = "category"
-          break;
-        case this.sortByList[3]:
-          this.sortBy = "weaponType"
-          break;
-        case this.sortByList[4]:
-          this.sortBy = "meleeWeapon"
-          break;
-        case this.sortByList[5]:
-          this.sortBy = "creationDate"
-          break;
-      }
-    },
-
     async search() {
       this.loading = true
       let oldHealthCheck = this.healthCheck
@@ -317,23 +320,8 @@ export default {
           let str = "spacemarines/search/health/greater"
           let data = {
             health: this.health,
-          }
-          axios.create()
-              .post(str, data)
-              .then(resp => {
-                this.Spacemarines = resp.data.items
-                this.$store.commit('clearAllSpacemarines')
-                this.$store.commit('updateSpacemarines', this.Spacemarines)
-              }).catch(() => {
-            this.renderComponent = false
-          })
-          break;
-        }
-        case this.healthList[2]: {
-          this.Spacemarines = new Array(this.limit)
-          let str = "spacemarines/search/health/less"
-          let data = {
-            health: this.health,
+            page: this.page,
+            limit: this.limit
           }
           axios.create()
               .post(str, data)
@@ -395,7 +383,7 @@ export default {
   created() {
     this.pageNumber = 10
     this.healthType = this.healthList[0]
-    this.titleSortBy = this.sortByList[0]
+    this.sortBy = this.sortByList[0].name
     //this.getListOfSpacemarines()
     const array = [];
     array.push({

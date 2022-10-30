@@ -107,7 +107,7 @@ export default {
 
     getSpacemarineByID() {
       let str = "/api/app/construction_crew/single?id="
-      axios.create(this.getHeader()
+      axios.create(this.getHeader(1)
       ).get(str)
           .then(resp => {
             this.CHAIN_SWORD = resp.data.CHAIN_SWORD

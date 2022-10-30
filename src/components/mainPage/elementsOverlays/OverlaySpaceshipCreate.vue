@@ -140,7 +140,7 @@ export default {
           fleet: this.fleet,
           coordinates: {x: this.coordinateX, y: this.coordinateY}
         }
-        axios.create(this.getHeader()
+        axios.create(this.getHeader(2)
         ).post(str, data)
             .then(resp => {
               console.log(resp.data)

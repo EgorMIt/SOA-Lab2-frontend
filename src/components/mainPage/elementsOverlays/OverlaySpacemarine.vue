@@ -217,7 +217,7 @@ export default {
           meleeWeapon: this.meleeWeapon,
           coordinates: {x: this.coordinateX, y: this.coordinateY}
         }
-        axios.create(this.getHeader()
+        axios.create(this.getHeader(1)
         ).put(str, data)
             .then(resp => {
               console.log(resp.data)
@@ -239,7 +239,7 @@ export default {
     async removeElement() {
       this.loadingRemove = true
       let str = "/spacemarines" + this.spacemarineIndex
-      axios.create(this.getHeader()
+      axios.create(this.getHeader(1)
       ).delete(str)
           .then(resp => {
             console.log(resp.data)
@@ -258,7 +258,7 @@ export default {
 
     getSpacemarineByID: function (id) {
       let str = "/spacemarines/" + id
-      axios.create(this.getHeader()
+      axios.create(this.getHeader(1)
       ).get(str)
           .then(resp => {
             this.name = resp.data.name

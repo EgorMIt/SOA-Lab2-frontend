@@ -201,7 +201,7 @@ export default {
           meleeWeapon: this.meleeWeapon,
           coordinates: {x: this.coordinateX, y: this.coordinateY}
         }
-        axios.create(this.getHeader()
+        axios.create(this.getHeader(1)
         ).post(str, data)
             .then(resp => {
               console.log(resp.data)

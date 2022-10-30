@@ -162,9 +162,16 @@
           color=#778899
           label="Сортировка:"
           editable
-          style="display: inline-block; width: 15%; margin-left: 8%"
+          style="display: inline-block; width: 9.5%; margin-left: 6%"
       ></v-select>
+      <v-switch
+          color=#778899
+          v-model="order"
+          :label="`${order === true ? 'ASC' : 'DESC'}`"
+          style="display: inline-block;"
+      ></v-switch>
     </div>
+
     <v-divider style="margin-top: 5px"></v-divider>
 
     <div style="margin-left: 11px">
@@ -238,6 +245,7 @@ export default {
     page: 1,
     pageNumber: '',
     limit: 5,
+    order: true,
 
     healthType: '',
     categoryList: ["AGGRESSOR", "ASSAULT", "HELIX"],
@@ -290,9 +298,10 @@ export default {
         creationDate: this.creationDate,
         sortBy: this.sortBy,
         page: this.page,
-        limit: this.limit
+        limit: this.limit,
+        order: (this.order === true ? 'ASC' : 'DESC')
       }
-      axios.create(this.getHeader())
+      axios.create(this.getHeader(1))
           .post(str, data)
           .then(resp => {
             this.Spacemarines = resp.data.items

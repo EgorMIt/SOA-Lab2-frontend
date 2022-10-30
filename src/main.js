@@ -30,15 +30,24 @@ Vue.mixin({
                 return flag
             }
         },*/
-        getHeader() {
-            return {
-                baseURL: this.hostname,
+        getHeader(serviceNumber) {
+            if (serviceNumber === 1) {
+                return {
+                    baseURL: this.firstHostname,
+                }
+            } else if (serviceNumber === 2) {
+                return {
+                    baseURL: this.secondHostname,
+                }
             }
         }
     },
     data: function () {
         return {
-            get hostname() {
+            get firstHostname() {
+                return "http://localhost:10080";
+            },
+            get secondHostname() {
                 return "http://localhost:10080";
             },
             get awaitTimer() {

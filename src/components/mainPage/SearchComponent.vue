@@ -178,8 +178,8 @@
       <div style="margin-top: 30px; margin-bottom: 30px; font-size: 20px" class="font-weight-medium">
         Список космодесантников, отсортированных по полю "{{ sortBy }}"
       </div>
-      <v-row v-for="(item, index) in Spacemarines" :key="index">
-        <SpacemarineButton :id="item.id" :SpacemarineName="item.name" :health="item.health"
+      <v-row v-for="(item, index) in this.$store.getters.allSpacemarines" :key="index">
+        <SpacemarineButton :index="item.id" :SpacemarineName="item.name" :health="item.health"
                            :creation-date="item.creationDate"
                            :category="item.category" :weapon-type="item.weaponType" :melee-weapon="item.meleeWeapon"
                            @updateParent="updateDialog"/>
@@ -204,7 +204,7 @@
 
 <script>
 import axios from "axios";
-import {mdiMagnify, mdiCloseCircleOutline, mdiHeart, mdiHumanMale, mdiSwordCross, mdiPistol} from "@mdi/js";
+import {mdiCloseCircleOutline, mdiHeart, mdiHumanMale, mdiMagnify, mdiPistol, mdiSwordCross} from "@mdi/js";
 import SpacemarineButton from "@/components/mainPage/SpacemarineButton";
 
 export default {
@@ -235,13 +235,14 @@ export default {
     slotSize: 28,
     renderComponent: false,
     mapPath: '',
-    name: '',
-    health: '',
-    category: '',
-    weaponType: '',
-    meleeWeapon: '',
+
+    name: null,
+    health: null,
+    category: null,
+    weaponType: null,
+    meleeWeapon: null,
     creationDate: null,
-    sortBy: '',
+    sortBy: null,
     page: 1,
     pageNumber: '',
     limit: 5,
@@ -295,15 +296,16 @@ export default {
         category: this.category,
         weaponType: this.weaponType,
         meleeWeapon: this.meleeWeapon,
-        creationDate: this.creationDate,
-        sortBy: this.sortBy,
+        //creationDate: this.creationDate,
+        //sortBy: this.sortBy,
         page: this.page,
         limit: this.limit,
-        order: (this.order === true ? 'ASC' : 'DESC')
+        //order: (this.order === true ? 'ASC' : 'DESC')
       }
       axios.create(this.getHeader(1))
           .post(str, data)
           .then(resp => {
+            console.log(resp)
             this.Spacemarines = resp.data.items
             this.pageNumber = resp.data.pageNumber
             this.$store.commit('clearAllSpacemarines')
@@ -319,7 +321,7 @@ export default {
       let oldHealthCheck = this.healthCheck
       this.healthCheck = true
 
-      /*
+
       switch (this.healthType) {
         case this.healthList[0]:
           this.getListOfSpacemarines()
@@ -332,7 +334,7 @@ export default {
             page: this.page,
             limit: this.limit
           }
-          axios.create()
+          axios.create(this.getHeader(1))
               .post(str, data)
               .then(resp => {
                 this.Spacemarines = resp.data.items
@@ -343,7 +345,7 @@ export default {
           })
           break;
         }
-      }*/
+      }
 
       await new Promise(resolve => setTimeout(resolve, this.awaitTimer))
 
@@ -361,12 +363,12 @@ export default {
     },
 
     clear() {
-      this.name = ''
-      this.health = ''
-      this.category = ''
-      this.weaponType = ''
-      this.meleeWeapon = ''
-      this.creationDate = ''
+      this.name = null
+      this.health = null
+      this.category = null
+      this.weaponType = null
+      this.meleeWeapon = null
+      this.creationDate = null
       this.healthType = this.healthList[0]
       this.healthCheck = false
       this.titleSortBy = this.sortByList[0]
@@ -393,8 +395,8 @@ export default {
     this.pageNumber = 10
     this.healthType = this.healthList[0]
     this.sortBy = this.sortByList[0].name
-    //this.getListOfSpacemarines()
-    const array = [];
+    this.getListOfSpacemarines()
+    /*const array = [];
     array.push({
       id: 1,
       name: "Name1",
@@ -414,7 +416,7 @@ export default {
       creationDate: new Date(1995, 11, 17)
     })
     this.Spacemarines = array
-    this.$store.commit('updateSpacemarines', this.Spacemarines)
+    this.$store.commit('updateSpacemarines', this.Spacemarines)*/
   },
 }
 </script>

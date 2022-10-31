@@ -96,19 +96,19 @@ export default {
     },
 
     getListOfSpaceships() {
-      let str = "/spaceships"
+      let str = "/starships"
       axios.create(this.getHeader(2)
       ).get(str)
           .then(resp => {
             console.log(resp.data)
-            this.Spaceships = resp.data.items
+            this.Spaceships = resp.data
           })
     },
 
     async cleanSpaceship() {
       if (this.$refs.form.validate()) {
         this.loadingRemove = true
-        let str = "/spaceships/" + this.ChooseSpaceship + "/unload"
+        let str = "/starships/" + this.ChooseSpaceship + "/unload"
         axios.create(this.getHeader(2)
         ).post(str)
             .then(resp => {
@@ -117,8 +117,6 @@ export default {
             .catch(err => {
               this.showError(err.response.data.message)
             })
-        await new Promise(resolve => setTimeout(resolve, this.awaitTimer))
-        this.updateOverlay()
         this.loadingRemove = false
       }
     },
@@ -139,16 +137,6 @@ export default {
   },
   beforeMount() {
     this.getListOfSpaceships()
-    const array = [];
-    array.push({
-      id: 1,
-      name: "Name1"
-    })
-    array.push({
-      id: 2,
-      name: "Name2"
-    })
-    this.Spaceships = array
   },
 }
 </script>

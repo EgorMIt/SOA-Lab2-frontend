@@ -16,12 +16,12 @@
             Категория: {{ category }}
           </div>
           <div style="position: absolute; right: 2%; font-size: 14px">`
-            {{ creationDate.toDateString() }}
+            {{ creationDate }}
           </div>
         </v-btn>
       </template>
 
-      <OverlaySpacemarine :spacemarineIndex="id" v-if="openWind === 'OverlaySpacemarine'"
+      <OverlaySpacemarine :spacemarineIndex="index" v-if="openWind === 'OverlaySpacemarine'"
                           @updateParent="updateDialog"/>
     </v-dialog>
   </div>
@@ -35,13 +35,13 @@ export default {
   components: {OverlaySpacemarine},
 
   props: {
-    id: Number,
+    index: Number,
     SpacemarineName: String,
     health: Number,
     category: String,
     weaponType: String,
     meleeWeapon: String,
-    creationDate: Date
+    creationDate: String
   },
   data: () => ({
     dialog: false,

@@ -63,6 +63,10 @@
         Закрыть
       </v-btn>
     </v-card>
+
+    <v-alert v-if="errorFlag" type="error" dismissible style="position: absolute; right: 2%; bottom: 2%">
+      {{ errorMessage }}
+    </v-alert>
   </v-form>
 </template>
 
@@ -79,6 +83,9 @@ export default {
       mdiShipWheel,
       mdiHumanScooter
     },
+    errorFlag: false,
+    errorMessage: '',
+
     absolute: true,
     valid: true,
 
@@ -106,19 +113,23 @@ export default {
     },
 
     getListOfSpaceships() {
-      let str = "/spaceships"
+      let str = "/starships"
       axios.create(this.getHeader(2)
       ).get(str)
           .then(resp => {
             console.log(resp.data)
-            this.Spaceships = resp.data.items
+            this.Spaceships = resp.data
           })
     },
 
     getListOfSpacemarines() {
-      let str = "/spacemarines"
+      let str = "/spacemarines/search"
+      let data = {
+        page: 1,
+        limit: 100,
+      }
       axios.create(this.getHeader(1)
-      ).get(str)
+      ).post(str, data)
           .then(resp => {
             console.log(resp.data)
             this.Spacemarines = resp.data.items
@@ -128,33 +139,37 @@ export default {
     async addMarineToSpaceship() {
       if (this.$refs.form.validate()) {
         this.loadingRemove = true
-        let str = "/spaceships/" + this.ChooseSpaceship + "/load/" + this.ChooseSpacemarine
+        let str = "/starships/" + this.ChooseSpaceship + "/load/" + this.ChooseSpacemarine
         axios.create(this.getHeader(2)
-        ).post(str)
+        ).put(str)
             .then(resp => {
               console.log(resp.data)
             })
+            .catch(err => {
+              this.showError(err.response.data.message)
+            })
         await new Promise(resolve => setTimeout(resolve, this.awaitTimer))
-        this.updateOverlay()
         this.loadingRemove = false
       }
+    },
+
+    async showError(errorMessage) {
+      if (this.errorFlag === true) {
+        this.errorMessage = ''
+        this.errorFlag = false
+        await new Promise(resolve => setTimeout(resolve, 200))
+      }
+      this.errorMessage = errorMessage
+      this.errorFlag = true
+      await new Promise(resolve => setTimeout(resolve, this.errorTimer))
+      this.errorMessage = ""
+      this.errorFlag = false
     }
 
   },
   beforeMount() {
     this.getListOfSpaceships()
     this.getListOfSpacemarines()
-    const array = [];
-    array.push({
-      id: 1,
-      name: "Name1"
-    })
-    array.push({
-      id: 2,
-      name: "Name2"
-    })
-    this.Spaceships = array
-    this.Spacemarines = array
   },
 }
 </script>

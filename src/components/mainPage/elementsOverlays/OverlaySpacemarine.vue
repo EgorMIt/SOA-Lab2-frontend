@@ -67,7 +67,6 @@
                 label="Координата X"
                 v-model="coordinateX"
                 type="number"
-                :rules="rules.numberValid"
                 color=#0E1117
                 background-color=#EDF2F7
                 outlined
@@ -80,7 +79,6 @@
                 label="Координата Y"
                 v-model="coordinateY"
                 type="number"
-                :rules="rules.numberValid"
                 color=#0E1117
                 background-color=#EDF2F7
                 outlined
@@ -121,6 +119,17 @@
             style="display: inline-block; width: 90%"
         ></v-overflow-btn>
 
+        <v-text-field
+            dense
+            disabled
+            label="Космический корабль"
+            v-model="starShipId"
+            type="number"
+            color=#0E1117
+            background-color=#EDF2F7
+            outlined
+            style="border-radius: 5px;"
+        />
       </v-card-text>
 
       <v-btn style="margin-left: 37%; margin-bottom: 5%"
@@ -189,6 +198,7 @@ export default {
     creationDate: '',
     coordinateX: '',
     coordinateY: '',
+    starShipId: null,
 
     categoryList: ["AGGRESSOR", "ASSAULT", "HELIX"],
     weaponTypeList: ["COMBI_FLAMER", "GRENADE_LAUNCHER", "INFERNO_PISTOL"],
@@ -212,6 +222,7 @@ export default {
         let data = {
           id: this.spacemarineIndex,
           name: this.name,
+          health: this.health,
           category: this.category,
           weaponType: this.weaponType,
           meleeWeapon: this.meleeWeapon,
@@ -238,7 +249,7 @@ export default {
 
     async removeElement() {
       this.loadingRemove = true
-      let str = "/spacemarines" + this.spacemarineIndex
+      let str = "/spacemarines/" + this.spacemarineIndex
       axios.create(this.getHeader(1)
       ).delete(str)
           .then(resp => {
@@ -269,6 +280,7 @@ export default {
             this.creationDate = resp.data.creationDate
             this.coordinateX = resp.data.coordinates.x
             this.coordinateY = resp.data.coordinates.y
+            this.starShipId = resp.data.starShipId
           })
     },
 

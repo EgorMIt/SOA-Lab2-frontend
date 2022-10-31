@@ -67,7 +67,6 @@
                 label="Координата X"
                 v-model="coordinateX"
                 type="number"
-                :rules="rules.numberValid"
                 color=#0E1117
                 background-color=#EDF2F7
                 outlined
@@ -80,7 +79,6 @@
                 label="Координата Y"
                 v-model="coordinateY"
                 type="number"
-                :rules="rules.numberValid"
                 color=#0E1117
                 background-color=#EDF2F7
                 outlined
@@ -196,6 +194,7 @@ export default {
         let str = "/spacemarines"
         let data = {
           name: this.name,
+          health: this.health,
           category: this.category,
           weaponType: this.weaponType,
           meleeWeapon: this.meleeWeapon,

@@ -34,10 +34,20 @@ Vue.mixin({
             if (serviceNumber === 1) {
                 return {
                     baseURL: this.firstHostname,
+                    headers: {
+                        'Access-Control-Allow-Origin': '*',
+                        'Access-Control-Allow-Headers': '*',
+                        'Access-Control-Allow-Credentials': 'true'
+                    }
                 }
             } else if (serviceNumber === 2) {
                 return {
                     baseURL: this.secondHostname,
+                    headers: {
+                        'Access-Control-Allow-Origin': '*',
+                        'Access-Control-Allow-Headers': '*',
+                        'Access-Control-Allow-Credentials': 'true'
+                    }
                 }
             }
         }
@@ -45,10 +55,10 @@ Vue.mixin({
     data: function () {
         return {
             get firstHostname() {
-                return "http://localhost:10080";
+                return "http://localhost:10356";
             },
             get secondHostname() {
-                return "http://localhost:10080";
+                return "http://localhost:12738";
             },
             get awaitTimer() {
                 return 1000;

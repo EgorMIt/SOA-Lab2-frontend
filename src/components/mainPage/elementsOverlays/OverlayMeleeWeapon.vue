@@ -106,9 +106,9 @@ export default {
     },
 
     getSpacemarineByID() {
-      let str = "/api/app/construction_crew/single?id="
+      let str = "/spacemarines/group/melee"
       axios.create(this.getHeader(1)
-      ).get(str)
+      ).post(str)
           .then(resp => {
             this.CHAIN_SWORD = resp.data.CHAIN_SWORD
             this.CHAIN_AXE = resp.data.CHAIN_AXE

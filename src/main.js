@@ -55,10 +55,10 @@ Vue.mixin({
     data: function () {
         return {
             get firstHostname() {
-                return "http://localhost:10356";
+                return "http://localhost:10000";
             },
             get secondHostname() {
-                return "http://localhost:12738";
+                return "http://localhost:10100";
             },
             get awaitTimer() {
                 return 1000;

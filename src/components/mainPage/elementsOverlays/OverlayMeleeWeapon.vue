@@ -110,9 +110,9 @@ export default {
       axios.create(this.getHeader(1)
       ).post(str)
           .then(resp => {
-            this.CHAIN_SWORD = resp.data.CHAIN_SWORD
-            this.CHAIN_AXE = resp.data.CHAIN_AXE
-            this.POWER_FIST = resp.data.POWER_FIST
+            this.CHAIN_SWORD = resp.data.chain_SWORD
+            this.CHAIN_AXE = resp.data.chain_AXE
+            this.POWER_FIST = resp.data.power_FIST
           })
     },
 

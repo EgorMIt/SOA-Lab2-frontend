@@ -1,0 +1,21 @@
+version: "2.1"
+services:
+
+  frontend-service:
+    image: egormit/frontend-service
+    container_name: frontend-service
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - "8080:8080"
+    networks:
+      - develop
+
+networks:
+  develop:
+    external:
+      name: develop
+
+# Перед запуском создать сеть:
+# docker network create develop --subnet=172.20.0.0/16

@@ -120,36 +120,6 @@
       <div style="margin-left: 4%; display: inline-block"/>
       <div style="display: inline-block; width: 200px"
       >
-        <v-menu ref="menu"
-                v-model="menu"
-                :close-on-content-click="false"
-                transition="scale-transition"
-                offset-y
-                min-width="auto"
-        >
-          <template v-slot:activator="{ on, attrs }">
-            <v-text-field
-                dense
-                v-model="creationDate"
-                label="Дата создания"
-                prepend-icon="mdi-calendar"
-                readonly
-                v-bind="attrs"
-                v-on="on"
-                color="#0E1117"
-                :disabled="healthCheck"
-            ></v-text-field>
-          </template>
-          <v-date-picker
-              color="#0E1117"
-              v-model="creationDate"
-              :active-picker.sync="activePicker"
-              :max="(new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)"
-              min="1950-01-01"
-              @change="saveDate"
-              :disabled="healthCheck"
-          ></v-date-picker>
-        </v-menu>
       </div>
       <v-select
           :disabled="healthCheck"
@@ -193,6 +163,7 @@
           v-model="page"
           :length=pageNumber
           :total-visible="5"
+          @input="search"
       ></v-pagination>
     </div>
 
@@ -271,10 +242,6 @@ export default {
       {
         name: "meleeWeapon",
         title: "По оружию ближнего боя"
-      },
-      {
-        name: "creationDate",
-        title: "По дате создания"
       }],
 
     healthList: ["HP равно: ", "HP больше чем: "],
@@ -297,10 +264,10 @@ export default {
         weaponType: this.weaponType,
         meleeWeapon: this.meleeWeapon,
         //creationDate: this.creationDate,
-        //sortBy: this.sortBy,
+        sortBy: this.sortBy,
         page: this.page,
         limit: this.limit,
-        //order: (this.order === true ? 'ASC' : 'DESC')
+        order: (this.order === true ? 'ASC' : 'DESC')
       }
       axios.create(this.getHeader(1))
           .post(str, data)
@@ -314,6 +281,10 @@ export default {
           .catch(err => {
             this.showError(err.response.data.message)
           })
+    },
+
+    go() {
+      console.log("121212")
     },
 
     async search() {

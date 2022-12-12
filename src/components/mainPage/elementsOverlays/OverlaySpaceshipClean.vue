@@ -117,7 +117,10 @@ export default {
             .catch(err => {
               this.showError(err.response.data.message)
             })
+        await new Promise(resolve => setTimeout(resolve, this.awaitTimer))
         this.loadingRemove = false
+        this.$root.$refs.SearchComp.getListOfSpacemarines();
+        this.closeDialog()
       }
     },
 

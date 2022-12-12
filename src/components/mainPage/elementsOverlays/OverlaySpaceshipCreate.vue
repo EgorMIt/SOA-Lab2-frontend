@@ -151,10 +151,9 @@ export default {
         await new Promise(resolve => setTimeout(resolve, this.awaitTimer))
         this.updateOverlay()
 
-        let data2 = {
-          dialog: false
-        }
-        this.$emit('updateParent', {data2})
+        this.$emit('updateParent', {
+          dialog: false,
+        })
         this.loadingSave = false
       }
     },

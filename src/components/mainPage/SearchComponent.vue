@@ -1,10 +1,5 @@
 <template>
   <v-container style="margin-top: 2%">
-    <!--<v-btn disabled v-if="!renderComponent" height="100px" plain
-           style="margin-top: 22%; color: black; font-size: 40px; font-weight: bold; text-align: center; margin-left: 13%"
-    >
-      <pre>Отсутствует покдлючение к серверу</pre>
-    </v-btn>-->
     <div style="margin-top: 50px">
       <v-text-field
           dense
@@ -150,7 +145,7 @@
       </div>
       <v-row v-for="(item, index) in this.$store.getters.allSpacemarines" :key="index">
         <SpacemarineButton :index="item.id" :SpacemarineName="item.name" :health="item.health"
-                           :creation-date="item.creationDate"
+                           :creation-date="item.creationDate" :starShipId="item.starShipId"
                            :category="item.category" :weapon-type="item.weaponType" :melee-weapon="item.meleeWeapon"
                            @updateParent="updateDialog"/>
       </v-row>
@@ -195,7 +190,6 @@ export default {
     errorFlag: false,
     errorMessage: '',
 
-    activePicker: null,
     menu: false,
     loading: false,
 
@@ -216,7 +210,7 @@ export default {
     sortBy: null,
     page: 1,
     pageNumber: '',
-    limit: 5,
+    limit: 4,
     order: true,
 
     healthType: '',
@@ -247,12 +241,6 @@ export default {
     healthList: ["HP равно: ", "HP больше чем: "],
   }),
 
-  watch: {
-    menu(val) {
-      val && setTimeout(() => (this.activePicker = 'YEAR'))
-    },
-  },
-
   methods: {
     getListOfSpacemarines() {
       this.Spacemarines = new Array(this.limit)
@@ -281,10 +269,6 @@ export default {
           .catch(err => {
             this.showError(err.response.data.message)
           })
-    },
-
-    go() {
-      console.log("121212")
     },
 
     async search() {
@@ -330,7 +314,7 @@ export default {
 
     updateDialog() {
       this.renderComponent = true
-      //this.getListOfSpacemarines()
+      this.getListOfSpacemarines()
     },
 
     clear() {
@@ -343,10 +327,7 @@ export default {
       this.healthType = this.healthList[0]
       this.healthCheck = false
       this.titleSortBy = this.sortByList[0]
-    },
-
-    saveDate() {
-      this.$refs.menu.save(this.creationDate)
+      this.sortBy = this.sortByList[0].name
     },
 
     async showError(errorMessage) {
@@ -363,31 +344,11 @@ export default {
     }
   },
   created() {
+    this.$root.$refs.SearchComp = this;
     this.pageNumber = 10
     this.healthType = this.healthList[0]
     this.sortBy = this.sortByList[0].name
     this.getListOfSpacemarines()
-    /*const array = [];
-    array.push({
-      id: 1,
-      name: "Name1",
-      health: 50,
-      category: "AGGRESSOR",
-      weaponType: "weaponType",
-      meleeWeapon: "CHAIN_SWORD",
-      creationDate: new Date(1995, 11, 17)
-    })
-    array.push({
-      id: 2,
-      name: "Name2",
-      health: 50,
-      category: "AGGRESSOR",
-      weaponType: "weaponType",
-      meleeWeapon: "CHAIN_SWORD",
-      creationDate: new Date(1995, 11, 17)
-    })
-    this.Spacemarines = array
-    this.$store.commit('updateSpacemarines', this.Spacemarines)*/
   },
 }
 </script>

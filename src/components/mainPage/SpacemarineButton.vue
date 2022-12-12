@@ -41,7 +41,8 @@ export default {
     category: String,
     weaponType: String,
     meleeWeapon: String,
-    creationDate: String
+    creationDate: String,
+    starShipId: Number
   },
   data: () => ({
     dialog: false,

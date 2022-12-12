@@ -168,7 +168,7 @@ import {mdiDelete, mdiHeart, mdiHumanMale, mdiSwordCross, mdiPistol, mdiFormText
 export default {
   name: "OverlaySpacemarine",
   props: {
-    spacemarineIndex: Number,
+    spacemarineIndex: Number
   },
 
   data: () => ({
@@ -198,7 +198,7 @@ export default {
     creationDate: '',
     coordinateX: '',
     coordinateY: '',
-    starShipId: null,
+    starShipId: '',
 
     categoryList: ["AGGRESSOR", "ASSAULT", "HELIX"],
     weaponTypeList: ["COMBI_FLAMER", "GRENADE_LAUNCHER", "INFERNO_PISTOL"],
@@ -239,10 +239,9 @@ export default {
         await new Promise(resolve => setTimeout(resolve, this.awaitTimer))
         this.updateOverlay()
 
-        let data2 = {
-          dialog: false
-        }
-        this.$emit('updateParent', {data2})
+        this.$emit('updateParent', {
+          dialog: false,
+        })
         this.loadingSave = false
       }
     },
@@ -260,10 +259,10 @@ export default {
           })
       await new Promise(resolve => setTimeout(resolve, this.awaitTimer))
       this.updateOverlay()
-      let data2 = {
-        dialog: false
-      }
-      this.$emit('updateParent', {data2})
+
+      this.$emit('updateParent', {
+        dialog: false,
+      })
       this.loadingRemove = false
     },
 

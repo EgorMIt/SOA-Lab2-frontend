@@ -99,10 +99,9 @@ export default {
   }),
   methods: {
     async submit() {
-      let data2 = {
-        dialog: false
-      }
-      this.$emit('updateParent', {data2})
+      this.$emit('updateParent', {
+        dialog: false,
+      })
     },
 
     getSpacemarineByID() {
